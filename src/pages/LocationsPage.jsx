@@ -1,11 +1,15 @@
-function LocationsPage({ locations, setLocations }) {
+import LocationList from "../features/LocationList";
+
+function LocationsPage({ locations, setLocations, isLoading }) {
   return (
     <>
       <h1>Saved Locations</h1>
       <p>Locations List</p>
-      <ul>
-        {locations.map(location => <li key={location.id}>{location.latitude}, {location.longitude}</li>)}
-      </ul>
+      {isLoading ? (
+        "Loading Locations..."
+      ) : (
+        <LocationList locations={locations} setLocations={setLocations} />
+      )}
     </>
   );
 }

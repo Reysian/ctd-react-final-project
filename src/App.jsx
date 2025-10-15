@@ -6,18 +6,51 @@ import styles from "./App.module.css";
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router";
 
+const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+const token = `Bearer ${import.meta.env.VITE_PAT}`;
+
 function App() {
   const [locations, setLocations] = useState([]);
+  const [currentLocation, setCurrentLocation] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    const initialLocations = [
-      { id: 1, latitude: 52.52, longitude: 13.41 },
-      { id: 2, latitude: 51.51, longitude: -0.13 },
-      { id: 3, latitude: 40.71, longitude: -74.01 },
-      { id: 4, latitude: 32.78, longitude: -96.8 },
-    ];
+    const fetchLocations = async () => {
+      setIsLoading(true);
 
-    setLocations(initialLocations);
+      const options = {
+        method: 'GET',
+        headers: {
+          Authorization: token,
+        },
+      };
+
+      try {
+        const resp = await fetch(url, options);
+        if (!resp.ok) {
+          throw new Error(resp.message);
+        }
+        const locationsData = await resp.json();
+        console.log(locationsData);
+        const fetchedLocations = locationsData.records.map((record) => {
+          const location = {
+            id: record.id,
+            ...record.fields,
+          };
+          console.log(location);
+          return location;
+        });
+        setLocations([...fetchedLocations]);
+      } catch (error) {
+        setErrorMessage(error.message);
+        console.log(error);
+      } finally {
+        console.log("fetch complete");
+        setIsLoading(false);
+      }
+    };
+    fetchLocations();
   }, []);
 
   return (
@@ -32,6 +65,7 @@ function App() {
               <LocationsPage
                 locations={locations}
                 setLocations={setLocations}
+                isLoading={isLoading}
               />
             }
           />
