@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import HomePage from "./pages/HomePage";
+import LocationsPage from "./pages/LocationsPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import Navbar from "./shared/Navbar";
+import styles from "./App.module.css";
+import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [locations, setLocations] = useState([]);
+
+  useEffect(() => {
+    const initialLocations = [
+      { id: 1, latitude: 52.52, longitude: 13.41 },
+      { id: 2, latitude: 51.51, longitude: -0.13 },
+      { id: 3, latitude: 40.71, longitude: -74.01 },
+      { id: 4, latitude: 32.78, longitude: -96.8 },
+    ];
+
+    setLocations(initialLocations);
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <Navbar />
+      <div className={styles.appBody}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/locations"
+            element={
+              <LocationsPage
+                locations={locations}
+                setLocations={setLocations}
+              />
+            }
+          />
+          <Route path="/*" element={<NotFoundPage />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
