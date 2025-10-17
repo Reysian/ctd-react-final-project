@@ -1,4 +1,4 @@
-import LocationList from "../features/LocationList";
+import LocationList from "../features/LocationList/LocationList";
 
 function LocationsPage({ locations, setLocations, isLoading }) {
   return (

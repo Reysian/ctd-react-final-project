@@ -1,7 +1,7 @@
 import HomePage from "./pages/HomePage";
 import LocationsPage from "./pages/LocationsPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import Navbar from "./shared/Navbar";
+import Navbar from "./features/Navbar";
 import styles from "./App.module.css";
 import { useState, useEffect, createContext } from "react";
 import { Routes, Route } from "react-router";

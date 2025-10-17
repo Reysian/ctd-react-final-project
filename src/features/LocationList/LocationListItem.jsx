@@ -1,6 +1,7 @@
 import styles from "./LocationListItem.module.css";
 import { useState, useEffect, useContext } from "react";
-import { AppContext } from '../App';
+import { useNavigate } from "react-router";
+import { AppContext } from '../../App';
 
 function LocationListItem({ location }) {
   const { translateCode, handleUpdateCurrentLocation } = useContext(AppContext);
@@ -8,6 +9,8 @@ function LocationListItem({ location }) {
   const [workingLocation, setWorkingLocation] = useState({});
   const [currentTemp, setCurrentTemp] = useState('...');
   const [currentWeatherCode, setCurrentWeatherCode] = useState('...');
+  const navigate = useNavigate();
+
   useEffect(() => {
     setWorkingLocation({...location});
 
@@ -38,16 +41,28 @@ function LocationListItem({ location }) {
   const handleClickTitle = (event) => {
     event.preventDefault();
     handleUpdateCurrentLocation(location.title, location.latitude, location.longitude);
+    navigate("/");
     console.log("current location updated");
   }
 
   return (
-    <li key={workingLocation.id}>
-      <span className={styles.title} onClick={(event) => handleClickTitle(event)}>
+    <tr key={workingLocation.id}>
+      <td className={styles.title} onClick={(event) => handleClickTitle(event)}>
         {workingLocation.title} 
-      </span>
-      : Lat = {workingLocation.latitude}, Long = {workingLocation.longitude}, Temp = {currentTemp}°F, Code = {translateCode(currentWeatherCode)}
-    </li>
+      </td>
+      <td>
+        {workingLocation.latitude}
+      </td>
+      <td>
+        {workingLocation.longitude}
+      </td>
+      <td>
+        {currentTemp}°F
+      </td>
+      <td>
+        {translateCode(currentWeatherCode)}
+      </td>
+    </tr>
   );
 }
 
