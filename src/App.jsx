@@ -3,15 +3,23 @@ import LocationsPage from "./pages/LocationsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./shared/Navbar";
 import styles from "./App.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createContext } from "react";
 import { Routes, Route } from "react-router";
 
-const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${import.meta.env.VITE_TABLE_NAME}`;
+const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${
+  import.meta.env.VITE_TABLE_NAME
+}`;
 const token = `Bearer ${import.meta.env.VITE_PAT}`;
+
+export const TranslatorContext = createContext(null);
 
 function App() {
   const [locations, setLocations] = useState([]);
-  const [currentLocation, setCurrentLocation] = useState({});
+  const [currentLocation, setCurrentLocation] = useState({
+    title: "Null Island",
+    latitude: 0,
+    longitude: 0,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -20,7 +28,7 @@ function App() {
       setIsLoading(true);
 
       const options = {
-        method: 'GET',
+        method: "GET",
         headers: {
           Authorization: token,
         },
@@ -53,20 +61,144 @@ function App() {
     fetchLocations();
   }, []);
 
+  const translateCode = (weatherCode) => {
+    let condition = "";
+
+    switch (weatherCode) {
+      case 0:
+        condition = "Clear Sky";
+        break;
+      case 1:
+        condition = "Mostly Clear Sky";
+        break;
+      case 2:
+        condition = "Partly Cloudy";
+        break;
+      case 3:
+        condition = "Overcast";
+        break;
+      case 45:
+        condition = "Foggy";
+        break;
+      case 48:
+        condition = "Foggy with Rime Fog";
+        break;
+      case 51:
+        condition = "Light Drizzle";
+        break;
+      case 53:
+        condition = "Moderate Drizzle";
+        break;
+      case 55:
+        condition = "Dense Drizzle";
+        break;
+      case 56:
+        condition = "Light Freezing Drizzle";
+        break;
+      case 57:
+        condition = "Dense Freezing Drizzle";
+        break;
+      case 61:
+        condition = "Light Rain";
+        break;
+      case 63:
+        condition = "Moderate Rain";
+        break;
+      case 65:
+        condition = "Heavy Rain";
+        break;
+      case 66:
+        condition = "Light Freezing Rain";
+        break;
+      case 67:
+        condition = "Heavy Freezing Rain";
+        break;
+      case 71:
+        condition = "Light Snow";
+        break;
+      case 73:
+        condition = "Moderate Snow";
+        break;
+      case 75:
+        condition = "Heavy Snow";
+        break;
+      case 77:
+        condition = "Snow Grains";
+        break;
+      case 80:
+        condition = "Light Rain Showers";
+        break;
+      case 81:
+        condition = "Moderate Rain Showers";
+        break;
+      case 82:
+        condition = "Violent Rain Showers";
+        break;
+      case 85:
+        condition = "Light Snow Showers";
+        break;
+      case 86:
+        condition = "Heavy Snow Showers";
+        break;
+      case 95:
+        condition = "Thunderstorm";
+        break;
+      case 96:
+        condition = "Thunderstorm with Light Hail";
+        break;
+      case 99:
+        condition = "Thunderstorm with Heavy Hail";
+        break;
+      default:
+        return weatherCode;
+    }
+    return condition;
+  };
+
+  const handleUpdateCurrentLocation = (title, latitude, longitude) => {
+    if (
+      latitude <= 90 &&
+      latitude >= -90 &&
+      longitude <= 180 &&
+      longitude >= -180
+    ) {
+      setErrorMessage("");
+      setCurrentLocation({ title, latitude, longitude });
+    } else if (longitude > 180 || longitude < -180) {
+      setErrorMessage("Longitude is out of range.");
+    } else if (latitude > 90 || latitude < -90) {
+      setErrorMessage("Latitude is out of range.");
+    }
+  };
+
   return (
     <>
-      <Navbar />
+      <Navbar
+        currentLocation={currentLocation}
+        updateCurrentLocation={handleUpdateCurrentLocation}
+      />
       <div className={styles.appBody}>
+        {errorMessage && <p>{errorMessage}</p>}
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/"
+            element={
+              <HomePage
+                currentLocation={currentLocation}
+                translateCode={translateCode}
+              />
+            }
+          />
           <Route
             path="/locations"
             element={
-              <LocationsPage
-                locations={locations}
-                setLocations={setLocations}
-                isLoading={isLoading}
+              <TranslatorContext.Provider value={ translateCode }>
+                <LocationsPage
+                  locations={locations}
+                  setLocations={setLocations}
+                  isLoading={isLoading}
               />
+              </TranslatorContext.Provider>
             }
           />
           <Route path="/*" element={<NotFoundPage />} />

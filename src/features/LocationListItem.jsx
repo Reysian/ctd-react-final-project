@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { TranslatorContext } from '../App';
 
 function LocationListItem({ location }) {
+  const translateCode = useContext(TranslatorContext);
   const [workingLocation, setWorkingLocation] = useState({});
   const [currentTemp, setCurrentTemp] = useState('...');
   const [currentWeatherCode, setCurrentWeatherCode] = useState('...');
@@ -9,7 +11,7 @@ function LocationListItem({ location }) {
 
     const fetchCurrentWeather = async () => {
         try {
-            const resp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,weather_code`);
+            const resp = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,weather_code&temperature_unit=fahrenheit`);
             if (!resp.ok) {
                 throw new Error(resp.message);
             }
@@ -23,11 +25,11 @@ function LocationListItem({ location }) {
         }
     };
     fetchCurrentWeather();
-  }, []);
+  }, [location]);
 
   return (
     <li key={workingLocation.id}>
-      {workingLocation.title}: Lat = {workingLocation.latitude}, Long = {workingLocation.longitude}, Temp = {currentTemp}°C, Code = {currentWeatherCode}
+      {workingLocation.title}: Lat = {workingLocation.latitude}, Long = {workingLocation.longitude}, Temp = {currentTemp}°F, Code = {translateCode(currentWeatherCode)}
     </li>
   );
 }
