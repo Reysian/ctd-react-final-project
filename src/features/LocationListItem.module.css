@@ -1,0 +1,11 @@
+.title {
+    font-weight: 500;
+}
+
+.title:hover {
+    color: blue;
+}
+
+.title:active {
+    color: green;
+}

@@ -11,7 +11,7 @@ const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${
 }`;
 const token = `Bearer ${import.meta.env.VITE_PAT}`;
 
-export const TranslatorContext = createContext(null);
+export const AppContext = createContext(null);
 
 function App() {
   const [locations, setLocations] = useState([]);
@@ -60,6 +60,97 @@ function App() {
     };
     fetchLocations();
   }, []);
+
+  const verifyValidCoords = (latitude, longitude) => {
+    if (
+      latitude <= 90 &&
+      latitude >= -90 &&
+      longitude <= 180 &&
+      longitude >= -180
+    ) {
+      setErrorMessage("");
+      return 0;
+    } else if (latitude > 90 || latitude < -90) {
+      setErrorMessage("Latitude is out of range.");
+      return 1;
+    } else if (longitude > 180 || longitude < -180) {
+      setErrorMessage("Longitude is out of range.");
+      return 2;
+    }
+  };
+
+  const addLocation = async (title, latitude, longitude) => {
+    const invalid = verifyValidCoords(latitude, longitude);
+    if (invalid) {
+      return(invalid);
+    }
+
+    const newLocation = { id: Date.now(), title, latitude, longitude };
+    const payload = {
+      records: [
+        {
+          fields: {
+            title: newLocation.title,
+            latitude: newLocation.latitude,
+            longitude: newLocation.longitude,
+          }
+        }
+      ]
+    };
+
+    console.log(payload);
+
+    const options = {
+      method: "POST",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    };
+
+    try {
+      const resp = await fetch(url, options);
+      if (!resp.ok) {
+        throw new Error(resp.message);
+      }
+      const { records } = await resp.json();
+
+      const savedLocation = {
+        id: records[0].id,
+        title: records[0].fields.title,
+        latitude: records[0].fields.latitude,
+        longitude: records[0].fields.longitude,
+      };
+
+      setLocations([...locations, savedLocation]);
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(error.message);
+    }
+
+    return 0;
+  };
+
+  const handleUpdateCurrentLocation = (title, latitude, longitude) => {
+    if (
+      latitude <= 90 &&
+      latitude >= -90 &&
+      longitude <= 180 &&
+      longitude >= -180
+    ) {
+      setErrorMessage("");
+      if (title) {
+        setCurrentLocation({ title, latitude, longitude });
+      } else {
+        setCurrentLocation({ title: "New Location", latitude, longitude });
+      }
+    } else if (longitude > 180 || longitude < -180) {
+      setErrorMessage("Longitude is out of range.");
+    } else if (latitude > 90 || latitude < -90) {
+      setErrorMessage("Latitude is out of range.");
+    }
+  };
 
   const translateCode = (weatherCode) => {
     let condition = "";
@@ -155,27 +246,12 @@ function App() {
     return condition;
   };
 
-  const handleUpdateCurrentLocation = (title, latitude, longitude) => {
-    if (
-      latitude <= 90 &&
-      latitude >= -90 &&
-      longitude <= 180 &&
-      longitude >= -180
-    ) {
-      setErrorMessage("");
-      setCurrentLocation({ title, latitude, longitude });
-    } else if (longitude > 180 || longitude < -180) {
-      setErrorMessage("Longitude is out of range.");
-    } else if (latitude > 90 || latitude < -90) {
-      setErrorMessage("Latitude is out of range.");
-    }
-  };
-
   return (
     <>
       <Navbar
         currentLocation={currentLocation}
         updateCurrentLocation={handleUpdateCurrentLocation}
+        addLocation={addLocation}
       />
       <div className={styles.appBody}>
         {errorMessage && <p>{errorMessage}</p>}
@@ -192,13 +268,13 @@ function App() {
           <Route
             path="/locations"
             element={
-              <TranslatorContext.Provider value={ translateCode }>
+              <AppContext.Provider value={{translateCode, handleUpdateCurrentLocation}}>
                 <LocationsPage
                   locations={locations}
                   setLocations={setLocations}
                   isLoading={isLoading}
-              />
-              </TranslatorContext.Provider>
+                />
+              </AppContext.Provider>
             }
           />
           <Route path="/*" element={<NotFoundPage />} />

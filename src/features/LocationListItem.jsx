@@ -1,8 +1,10 @@
+import styles from "./LocationListItem.module.css";
 import { useState, useEffect, useContext } from "react";
-import { TranslatorContext } from '../App';
+import { AppContext } from '../App';
 
 function LocationListItem({ location }) {
-  const translateCode = useContext(TranslatorContext);
+  const { translateCode, handleUpdateCurrentLocation } = useContext(AppContext);
+  const [hasFetched, setHasFetched] = useState(false);
   const [workingLocation, setWorkingLocation] = useState({});
   const [currentTemp, setCurrentTemp] = useState('...');
   const [currentWeatherCode, setCurrentWeatherCode] = useState('...');
@@ -24,12 +26,27 @@ function LocationListItem({ location }) {
             console.log("fetch weather complete");
         }
     };
-    fetchCurrentWeather();
+    if(!hasFetched) {
+      fetchCurrentWeather();
+    }
+
+    return () => {
+      setHasFetched(true);
+    }
   }, [location]);
+
+  const handleClickTitle = (event) => {
+    event.preventDefault();
+    handleUpdateCurrentLocation(location.title, location.latitude, location.longitude);
+    console.log("current location updated");
+  }
 
   return (
     <li key={workingLocation.id}>
-      {workingLocation.title}: Lat = {workingLocation.latitude}, Long = {workingLocation.longitude}, Temp = {currentTemp}°F, Code = {translateCode(currentWeatherCode)}
+      <span className={styles.title} onClick={(event) => handleClickTitle(event)}>
+        {workingLocation.title} 
+      </span>
+      : Lat = {workingLocation.latitude}, Long = {workingLocation.longitude}, Temp = {currentTemp}°F, Code = {translateCode(currentWeatherCode)}
     </li>
   );
 }

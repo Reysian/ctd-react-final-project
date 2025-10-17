@@ -2,18 +2,27 @@ import { Link } from "react-router";
 import { useRef, useState } from "react";
 import styles from "./Navbar.module.css";
 
-function Navbar({ currentLocation, updateCurrentLocation }) {
+function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
+  const titleInput = useRef(document.querySelector("#title"))
   const latitudeInput = useRef(document.querySelector("#lat"));
   const longitudeInput = useRef(document.querySelector("#lon"));
 
+  const [workingTitle, setWorkingTitle] = useState("");
   const [workingLatitude, setWorkingLatitude] = useState(0);
   const [workingLongitude, setWorkingLongitude] = useState(0);
 
   const handleUpdateCoords = (event) => {
     event.preventDefault();
-    updateCurrentLocation("New Location", Number(workingLatitude), Number(workingLongitude));
+    const title = workingTitle ? workingTitle : "New Location";
+    updateCurrentLocation(title, Number(workingLatitude), Number(workingLongitude));
     console.log("submit");
   };
+
+  const handleSaveCurrentLocation = (event) => {
+    event.preventDefault();
+    addLocation(currentLocation.title, currentLocation.latitude, currentLocation.longitude);
+    console.log("save current location");
+  }
 
   return (
     <nav className={styles.nav}>
@@ -29,6 +38,14 @@ function Navbar({ currentLocation, updateCurrentLocation }) {
         </li>
         <li>
           <form onSubmit={(event) => handleUpdateCoords(event)}>
+            <input
+              id="title"
+              ref={titleInput}
+              type="text"
+              placeholder="Place Name"
+              value={workingTitle}
+              onChange={(event) => setWorkingTitle(event.target.value)}
+            ></input>
             <input
               id="lat"
               ref={latitudeInput}
@@ -47,6 +64,9 @@ function Navbar({ currentLocation, updateCurrentLocation }) {
             ></input>
             <button onSubmit={(event) => (handleUpdateCoords(event))}>Submit Coords</button>
           </form>
+        </li>
+        <li>
+          <button onClick={(event) => (handleSaveCurrentLocation(event))}>Save Current Location</button> 
         </li>
       </ul>
     </nav>
