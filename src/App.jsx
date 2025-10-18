@@ -132,6 +132,56 @@ function App() {
     return 0;
   };
 
+  const updateLocation = async (editedLocation) => {
+    const originalLocation = locations.find((location) => location.id === editedLocation.id);
+
+    const updatedLocations = location.map((location) => 
+      location.id === editedLocation.id ? {...editedLocation} : location
+    );
+
+    setLocations(updatedLocations);
+
+    const payload = {
+      records: [
+        {
+          id: editedLocation.id,
+          fields: {
+            title: editedLocation.title,
+            latitude: editedLocation.latitude,
+            longitude: editedLocation.longitude,
+          },
+        },
+      ],
+    };
+
+    const options = {
+      method: "PATCH",
+      headers: {
+        Authorization: token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    };
+
+    try {
+      const resp = await fetch(url, options);
+      if (!resp.ok) {
+        throw new Error(resp.message);
+      }
+    } catch (error) {
+      console.log(error);
+
+      setErrorMessage(`${error.message}. Edit failed...`);
+      const revertedLocations = location.map((location) => 
+        location.id === originalLocation.id ? {...originalLocation} : location
+      );
+      
+      setLocations([...revertedLocations]);
+    } finally {
+      console.log("PATCH complete");
+    }
+  };
+
   const handleUpdateCurrentLocation = (title, latitude, longitude) => {
     if (
       latitude <= 90 &&
