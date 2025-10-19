@@ -12,8 +12,10 @@ function LocationForm({title = "", latitude = "", longitude = "", submitLocation
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    submitLocation(workingTitle, workingLatitude, workingLongitude);
+    const validatedTitle = workingTitle ? workingTitle : "New Location";
+    submitLocation(validatedTitle, Number(workingLatitude), Number(workingLongitude));
   };
+  
   return (
     <form onSubmit={(event) => handleSubmit(event)}>
       <input

@@ -3,8 +3,8 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 import { AppContext } from '../../App';
 
-function LocationListItem({ location, editLocation }) {
-  const { translateCode, handleUpdateCurrentLocation } = useContext(AppContext);
+function LocationListItem({ location, editLocation, deleteLocation }) {
+  const { translateCode, updateCurrentLocation } = useContext(AppContext);
   const [workingLocation, setWorkingLocation] = useState({});
   const [currentTemp, setCurrentTemp] = useState('...');
   const [currentWeatherCode, setCurrentWeatherCode] = useState('...');
@@ -33,7 +33,7 @@ function LocationListItem({ location, editLocation }) {
 
   const handleClickTitle = (event) => {
     event.preventDefault();
-    handleUpdateCurrentLocation(location.title, location.latitude, location.longitude);
+    updateCurrentLocation(location.title, location.latitude, location.longitude);
     navigate("/");
     console.log("current location updated");
   }
@@ -57,6 +57,9 @@ function LocationListItem({ location, editLocation }) {
       </td>
       <td className={styles.clickable} onClick={() => editLocation(location)}>
         Edit
+      </td>
+      <td className={styles.clickable} onClick={() => deleteLocation(location)}>
+        Delete
       </td>
     </tr>
   );

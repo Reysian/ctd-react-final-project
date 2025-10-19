@@ -1,7 +1,7 @@
 import LocationListItem from "./LocationListItem";
 import { useState, useEffect } from "react";
 
-function LocationList({ locations, editLocation }) {
+function LocationList({ locations, editLocation, addLocation, deleteLocation }) {
   return (
     <table>
       <thead>
@@ -11,11 +11,12 @@ function LocationList({ locations, editLocation }) {
           <th>Longitude</th>
           <th>Current Temperature</th>
           <th>Current Weather Condition</th>
+          <th onClick={() => addLocation()}>Add</th>
         </tr>
       </thead>
       <tbody>
         {locations.map((location) => (
-          <LocationListItem key={location.id} location={location} editLocation={editLocation}/>
+          <LocationListItem key={location.id} location={location} editLocation={editLocation} deleteLocation={deleteLocation}/>
         ))}
       </tbody>
     </table>

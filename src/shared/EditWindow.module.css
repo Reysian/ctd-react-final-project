@@ -1,0 +1,36 @@
+.window {
+    display: flex;
+    width: fit-content;
+    flex-direction: column;
+    font-family: sans-serif;
+    background-color:#add8e680;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.window button {
+    text-align: center;
+    margin: 2px;
+    border: 1px solid gray;
+    border-radius: 3px;
+    &:disabled {
+      font-style: italic;
+    }
+    &:hover {
+      background-color: lightblue;
+    }
+    &:active {
+      background-color: lightgreen;
+    }
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.header button {
+    width: fit-content;
+    height: fit-content;
+}

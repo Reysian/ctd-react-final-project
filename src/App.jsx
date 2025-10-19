@@ -183,7 +183,33 @@ function App() {
     }
   };
 
-  const handleUpdateCurrentLocation = (title, latitude, longitude) => {
+  const deleteLocation = async (deletedLocation) => {
+
+    const options = {
+      method: 'DELETE',
+      headers: {
+        Authorization: token,
+      },
+    };
+
+    try {
+      const resp = await fetch(url + `/${deletedLocation.id}`, options);
+      if (!resp.ok) {
+        throw new Error(resp.message);
+      }
+
+      const updatedLocations = locations.filter((location) => (location.id !== deletedLocation.id));
+      setLocations(updatedLocations);
+
+    } catch (error) {
+      console.log(error);
+      setErrorMessage(`${error.message}. Deletion failed...`);
+    } finally {
+      console.log("DELETE complete");
+    }
+  }
+
+  const updateCurrentLocation = (title, latitude, longitude) => {
     if (
       latitude <= 90 &&
       latitude >= -90 &&
@@ -301,7 +327,7 @@ function App() {
     <>
       <Navbar
         currentLocation={currentLocation}
-        updateCurrentLocation={handleUpdateCurrentLocation}
+        updateCurrentLocation={updateCurrentLocation}
         addLocation={addLocation}
       />
       <div className={styles.appBody}>
@@ -319,12 +345,14 @@ function App() {
           <Route
             path="/locations"
             element={
-              <AppContext.Provider value={{translateCode, handleUpdateCurrentLocation}}>
+              <AppContext.Provider value={{translateCode, updateCurrentLocation}}>
                 <LocationsPage
                   locations={locations}
                   setLocations={setLocations}
                   isLoading={isLoading}
+                  addLocation={addLocation}
                   updateLocation={updateLocation}
+                  deleteLocation={deleteLocation}
                 />
               </AppContext.Provider>
             }

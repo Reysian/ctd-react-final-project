@@ -13,3 +13,21 @@
     list-style: none;
     gap: 1rem;
 }
+
+.nav button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  color: #646cff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+.nav button:hover {
+  border-color: #646cff;
+}
+.nav button:focus,
+.nav button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
