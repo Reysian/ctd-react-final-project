@@ -1,14 +1,16 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useRef, useState } from "react";
 import LocationForm from "../shared/LocationForm";
 import styles from "./Navbar.module.css";
 
 function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
+  const navigate = useNavigate();
 
-  const handleUpdateCoords = (title, latitude, longitude) => {
+  const updateCoords = (title, latitude, longitude) => {
     const validatedTitle = title ? title : "New Location";
     updateCurrentLocation(validatedTitle, Number(latitude), Number(longitude));
     console.log("submit");
+    navigate("/");
   };
 
   const handleSaveCurrentLocation = (event) => {
@@ -31,7 +33,7 @@ function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
         </li>
         <li>
           <LocationForm
-            submitLocation={handleUpdateCoords}
+            submitLocation={updateCoords}
           />
         </li>
         <li>

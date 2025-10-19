@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import styles from "./LocationForm.module.css";
 
 function LocationForm({title = "", latitude = "", longitude = "", submitLocation}) {
   const titleInput = useRef(document.querySelector("#title"));

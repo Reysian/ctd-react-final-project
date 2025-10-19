@@ -133,9 +133,10 @@ function App() {
   };
 
   const updateLocation = async (editedLocation) => {
+    console.log(editedLocation);
     const originalLocation = locations.find((location) => location.id === editedLocation.id);
 
-    const updatedLocations = location.map((location) => 
+    const updatedLocations = locations.map((location) => 
       location.id === editedLocation.id ? {...editedLocation} : location
     );
 
@@ -155,10 +156,10 @@ function App() {
     };
 
     const options = {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
         Authorization: token,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(payload),
     };
@@ -172,7 +173,7 @@ function App() {
       console.log(error);
 
       setErrorMessage(`${error.message}. Edit failed...`);
-      const revertedLocations = location.map((location) => 
+      const revertedLocations = locations.map((location) => 
         location.id === originalLocation.id ? {...originalLocation} : location
       );
       
@@ -323,6 +324,7 @@ function App() {
                   locations={locations}
                   setLocations={setLocations}
                   isLoading={isLoading}
+                  updateLocation={updateLocation}
                 />
               </AppContext.Provider>
             }

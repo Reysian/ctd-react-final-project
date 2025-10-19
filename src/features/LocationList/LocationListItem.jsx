@@ -3,9 +3,8 @@ import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 import { AppContext } from '../../App';
 
-function LocationListItem({ location }) {
+function LocationListItem({ location, editLocation }) {
   const { translateCode, handleUpdateCurrentLocation } = useContext(AppContext);
-  const [hasFetched, setHasFetched] = useState(false);
   const [workingLocation, setWorkingLocation] = useState({});
   const [currentTemp, setCurrentTemp] = useState('...');
   const [currentWeatherCode, setCurrentWeatherCode] = useState('...');
@@ -29,13 +28,7 @@ function LocationListItem({ location }) {
             console.log("fetch weather complete");
         }
     };
-    if(!hasFetched) {
-      fetchCurrentWeather();
-    }
-
-    return () => {
-      setHasFetched(true);
-    }
+    fetchCurrentWeather();
   }, [location]);
 
   const handleClickTitle = (event) => {
@@ -47,7 +40,7 @@ function LocationListItem({ location }) {
 
   return (
     <tr key={workingLocation.id}>
-      <td className={styles.title} onClick={(event) => handleClickTitle(event)}>
+      <td className={styles.clickable} onClick={(event) => handleClickTitle(event)}>
         {workingLocation.title} 
       </td>
       <td>
@@ -61,6 +54,9 @@ function LocationListItem({ location }) {
       </td>
       <td>
         {translateCode(currentWeatherCode)}
+      </td>
+      <td className={styles.clickable} onClick={() => editLocation(location)}>
+        Edit
       </td>
     </tr>
   );

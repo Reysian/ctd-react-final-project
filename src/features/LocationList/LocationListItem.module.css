@@ -1,12 +1,12 @@
-.title {
+.clickable {
     font-weight: 500;
 }
 
-.title:hover {
+.clickable:hover {
     color: blue;
 }
 
-.title:active {
+.clickable:active {
     color: green;
 }
 
