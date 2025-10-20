@@ -46,7 +46,6 @@ function App() {
             id: record.id,
             ...record.fields,
           };
-          console.log(location);
           return location;
         });
         setLocations([...fetchedLocations]);
