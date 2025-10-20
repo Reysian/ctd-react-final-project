@@ -1,0 +1,13 @@
+.forecast, .forecast th, .forecast td{
+    border: 1px solid;
+}
+
+.forecast th {
+    width: 150px;
+}
+
+.forecast td {
+    font-weight: 500;
+    vertical-align: top;
+    padding: 0 1rem;
+}

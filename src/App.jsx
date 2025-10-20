@@ -3,7 +3,7 @@ import LocationsPage from "./pages/LocationsPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./features/Navbar";
 import styles from "./App.module.css";
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, useCallback, createContext } from "react";
 import { Routes, Route } from "react-router";
 
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${
@@ -40,7 +40,6 @@ function App() {
           throw new Error(resp.message);
         }
         const locationsData = await resp.json();
-        console.log(locationsData);
         const fetchedLocations = locationsData.records.map((record) => {
           const location = {
             id: record.id,
@@ -217,9 +216,11 @@ function App() {
   }
 
   const updateCurrentLocation = (title, latitude, longitude) => {
+
     const valid = verifyValidCoords(latitude, longitude);
     if (valid) {
       setErrorMessage("");
+      console.log("Current Location Set");
       if (title) {
         setCurrentLocation({ title, latitude, longitude });
       } else {
@@ -228,7 +229,7 @@ function App() {
     }
   };
 
-  const translateCode = (weatherCode) => {
+  const translateCode = useCallback((weatherCode) => {
     let condition = "";
 
     switch (weatherCode) {
@@ -317,10 +318,10 @@ function App() {
         condition = "Thunderstorm with Heavy Hail";
         break;
       default:
-        return weatherCode;
+        return "Unknown Weather Condition";
     }
     return condition;
-  };
+  }, []);
 
   return (
     <>
