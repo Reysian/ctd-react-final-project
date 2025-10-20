@@ -1,4 +1,5 @@
 import LocationListItem from "./LocationListItem";
+import styles from "./LocationList.module.css";
 import { useState, useEffect } from "react";
 
 function LocationList({ locations, editLocation, addLocation, deleteLocation }) {
@@ -11,7 +12,7 @@ function LocationList({ locations, editLocation, addLocation, deleteLocation }) 
           <th>Longitude</th>
           <th>Current Temperature</th>
           <th>Current Weather Condition</th>
-          <th onClick={() => addLocation()}>Add</th>
+          <th className={styles.clickable} onClick={() => addLocation()}>Add</th>
         </tr>
       </thead>
       <tbody>

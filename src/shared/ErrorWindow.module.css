@@ -3,7 +3,7 @@
     width: fit-content;
     flex-direction: column;
     font-family: sans-serif;
-    background-color:#add8e680;
+    background-color:#d6707080;
     border-radius: 10px;
     padding: 8px;
     margin: 4px 0;
@@ -28,7 +28,7 @@
 .header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-between;   
 }
 
 .header h4 {

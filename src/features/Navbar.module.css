@@ -31,3 +31,20 @@
 .nav button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #8fc9ff;
+}
+
+.active {
+  color: #8fc9ff;
+}
+
+.inactive {
+  color: #646cff;
+}

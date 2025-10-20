@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { useRef, useState } from "react";
 import LocationForm from "../shared/LocationForm";
 import styles from "./Navbar.module.css";
@@ -15,9 +15,14 @@ function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
 
   const handleSaveCurrentLocation = (event) => {
     event.preventDefault();
-    addLocation(currentLocation.title, currentLocation.latitude, currentLocation.longitude);
+    addLocation(
+      currentLocation.title,
+      currentLocation.latitude,
+      currentLocation.longitude
+    );
     console.log("save current location");
-  }
+    console.log(currentLocation.latitude, currentLocation.longitude);
+  };
 
   return (
     <nav className={styles.nav}>
@@ -26,18 +31,32 @@ function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
       </Link>
       <ul>
         <li>
-          <Link to="/">Home</Link>
+          <NavLink
+            to={"/"}
+            className={({ isActive }) =>
+              isActive ? styles.active : styles.inactive
+            }
+          >
+            Home
+          </NavLink>
         </li>
         <li>
-          <Link to="/locations">Locations</Link>
+          <NavLink
+            to={"/locations"}
+            className={({ isActive }) =>
+              isActive ? styles.active : styles.inactive
+            }
+          >
+            Locations
+          </NavLink>
         </li>
         <li>
-          <LocationForm
-            submitLocation={updateCoords}
-          />
+          <LocationForm submitLocation={updateCoords} />
         </li>
         <li>
-          <button onClick={(event) => (handleSaveCurrentLocation(event))}>Save Current Location</button> 
+          <button onClick={(event) => handleSaveCurrentLocation(event)}>
+            Save Current Location
+          </button>
         </li>
       </ul>
     </nav>

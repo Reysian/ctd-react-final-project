@@ -1,0 +1,11 @@
+.clickable {
+    font-weight: 500;
+}
+
+.clickable:hover {
+    color: blue;
+}
+
+.clickable:active {
+    color: green;
+}

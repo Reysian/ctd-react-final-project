@@ -69,20 +69,24 @@ function App() {
       longitude >= -180
     ) {
       setErrorMessage("");
-      return 0;
+      return true;
+    } else if ((latitude > 90 || latitude < -90) && (longitude > 180 || longitude < -180)) {
+      setErrorMessage("Latitude and longitude are out of range.");
+      return false;
     } else if (latitude > 90 || latitude < -90) {
       setErrorMessage("Latitude is out of range.");
-      return 1;
+      return false;
     } else if (longitude > 180 || longitude < -180) {
       setErrorMessage("Longitude is out of range.");
-      return 2;
+      return false;
     }
   };
 
   const addLocation = async (title, latitude, longitude) => {
-    const invalid = verifyValidCoords(latitude, longitude);
-    if (invalid) {
-      return(invalid);
+    //TODO: Check empty location
+    const valid = verifyValidCoords(latitude, longitude);
+    if (!valid) {
+      return;
     }
 
     const newLocation = { id: Date.now(), title, latitude, longitude };
@@ -133,7 +137,11 @@ function App() {
   };
 
   const updateLocation = async (editedLocation) => {
-    console.log(editedLocation);
+    const valid = verifyValidCoords(editedLocation.latitude, editedLocation.longitude);
+    if (!valid) {
+      return;
+    }
+
     const originalLocation = locations.find((location) => location.id === editedLocation.id);
 
     const updatedLocations = locations.map((location) => 
@@ -210,22 +218,14 @@ function App() {
   }
 
   const updateCurrentLocation = (title, latitude, longitude) => {
-    if (
-      latitude <= 90 &&
-      latitude >= -90 &&
-      longitude <= 180 &&
-      longitude >= -180
-    ) {
+    const valid = verifyValidCoords(latitude, longitude);
+    if (valid) {
       setErrorMessage("");
       if (title) {
         setCurrentLocation({ title, latitude, longitude });
       } else {
         setCurrentLocation({ title: "New Location", latitude, longitude });
       }
-    } else if (longitude > 180 || longitude < -180) {
-      setErrorMessage("Longitude is out of range.");
-    } else if (latitude > 90 || latitude < -90) {
-      setErrorMessage("Latitude is out of range.");
     }
   };
 
@@ -331,21 +331,23 @@ function App() {
         addLocation={addLocation}
       />
       <div className={styles.appBody}>
-        {errorMessage && <p>{errorMessage}</p>}
         <Routes>
           <Route
             path="/"
             element={
-              <HomePage
-                currentLocation={currentLocation}
-                translateCode={translateCode}
-              />
+              <AppContext.Provider value={{locations, addLocation, updateLocation, deleteLocation, translateCode, updateCurrentLocation, errorMessage, setErrorMessage}}>
+                <HomePage
+                  currentLocation={currentLocation}
+                  translateCode={translateCode}
+                  errorMessage={errorMessage}
+                />
+              </AppContext.Provider>
             }
           />
           <Route
             path="/locations"
             element={
-              <AppContext.Provider value={{translateCode, updateCurrentLocation}}>
+              <AppContext.Provider value={{locations, addLocation, updateLocation, deleteLocation, translateCode, updateCurrentLocation, errorMessage, setErrorMessage}}>
                 <LocationsPage
                   locations={locations}
                   setLocations={setLocations}
@@ -353,6 +355,7 @@ function App() {
                   addLocation={addLocation}
                   updateLocation={updateLocation}
                   deleteLocation={deleteLocation}
+                  errorMessage={errorMessage}
                 />
               </AppContext.Provider>
             }
