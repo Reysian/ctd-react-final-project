@@ -1,6 +1,7 @@
 import LocationForm from "./LocationForm";
 import styles from "./EditWindow.module.css";
 
+/* Adds/Edits locations in LocationsPage using a LocationForm */
 function EditWindow({
   header,
   title,
@@ -13,7 +14,6 @@ function EditWindow({
     event.preventDefault();
     cancelEdit();
   };
-  //TODO: Add error checking/correction
   return (
     <div className={styles.window}>
       <div className={styles.header}>

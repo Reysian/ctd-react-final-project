@@ -1,20 +1,20 @@
 .clickable {
-    font-weight: 500;
+  cursor: pointer;
 }
 
 .clickable:hover {
-    color: blue;
+  color: blue;
 }
 
 .clickable:active {
-    color: green;
+  color: green;
 }
 
 th {
-    justify-content: left;
-    background-color: #D6EEEE80;
+  justify-content: left;
+  background-color: #d6eeee80;
 }
 
 tr:nth-child(even) {
-  background-color: #D6EEEE80;
+  background-color: #d6eeee80;
 }

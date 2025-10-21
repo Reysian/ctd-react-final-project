@@ -1,10 +1,15 @@
 import LocationListItem from "./LocationListItem";
 import styles from "./LocationList.module.css";
-import { useState, useEffect } from "react";
 
-function LocationList({ locations, editLocation, addLocation, deleteLocation }) {
+/*List of saved locations*/
+function LocationList({
+  locations,
+  editLocation,
+  addLocation,
+  deleteLocation,
+}) {
   return (
-    <table>
+    <table className={styles.locationsTable}>
       <thead>
         <tr>
           <th>Place Name</th>
@@ -12,12 +17,19 @@ function LocationList({ locations, editLocation, addLocation, deleteLocation }) 
           <th>Longitude</th>
           <th>Current Temperature</th>
           <th>Current Weather Condition</th>
-          <th className={styles.clickable} onClick={() => addLocation()}>Add</th>
+          <th className={styles.clickable} onClick={() => addLocation()}>
+            Add
+          </th>
         </tr>
       </thead>
       <tbody>
         {locations.map((location) => (
-          <LocationListItem key={location.id} location={location} editLocation={editLocation} deleteLocation={deleteLocation}/>
+          <LocationListItem
+            key={location.id}
+            location={location}
+            editLocation={editLocation}
+            deleteLocation={deleteLocation}
+          />
         ))}
       </tbody>
     </table>

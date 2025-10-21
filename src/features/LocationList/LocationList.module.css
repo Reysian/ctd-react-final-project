@@ -1,11 +1,23 @@
 .clickable {
-    font-weight: 500;
+  cursor: pointer;
 }
 
 .clickable:hover {
-    color: blue;
+  color: blue;
 }
 
 .clickable:active {
-    color: green;
+  color: green;
+}
+
+.locationsTable {
+  font-weight: 500;
+}
+
+.locationsTable th {
+  padding: 0.4rem;
+}
+
+.locationsTable td {
+  padding: 0.4rem;
 }

@@ -5,6 +5,7 @@ import { AppContext } from "../App";
 function ErrorWindow({ errorMessage }) {
   const { setErrorMessage } = useContext(AppContext);
 
+  /* Closes error window by clearing the error message */
   const handleCloseWindow = (event) => {
     event.preventDefault();
     setErrorMessage("");

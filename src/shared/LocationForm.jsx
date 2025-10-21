@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
 import styles from "./LocationForm.module.css";
 
-function LocationForm({title = "", latitude = "", longitude = "", submitLocation}) {
+/* Controlled form component for entering coordinates and a place name */
+function LocationForm({
+  title = "",
+  latitude = "",
+  longitude = "",
+  submitLocation,
+}) {
   const titleInput = useRef(document.querySelector("#title"));
   const latitudeInput = useRef(document.querySelector("#lat"));
   const longitudeInput = useRef(document.querySelector("#lon"));
@@ -10,12 +16,17 @@ function LocationForm({title = "", latitude = "", longitude = "", submitLocation
   const [workingLatitude, setWorkingLatitude] = useState(latitude);
   const [workingLongitude, setWorkingLongitude] = useState(longitude);
 
+  /* Send form input to submitLocation function in parent component (empty title defaults to "New Location") */
   const handleSubmit = (event) => {
     event.preventDefault();
     const validatedTitle = workingTitle ? workingTitle : "New Location";
-    submitLocation(validatedTitle, Number(workingLatitude), Number(workingLongitude));
+    submitLocation(
+      validatedTitle,
+      Number(workingLatitude),
+      Number(workingLongitude)
+    );
   };
-  
+
   return (
     <form onSubmit={(event) => handleSubmit(event)}>
       <input

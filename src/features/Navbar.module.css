@@ -7,11 +7,11 @@
 }
 
 .nav ul {
-    display: flex;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    gap: 1rem;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  gap: 1rem;
 }
 
 .nav button {

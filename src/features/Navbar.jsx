@@ -1,8 +1,8 @@
 import { Link, NavLink, useNavigate } from "react-router";
-import { useRef, useState } from "react";
 import LocationForm from "../shared/LocationForm";
 import styles from "./Navbar.module.css";
 
+/*Handles page navigation and allows the user to set a custom location as the current location without saving it to Airtable*/
 function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
   const navigate = useNavigate();
 
@@ -13,6 +13,7 @@ function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
     navigate("/");
   };
 
+  /*Saves the current location to persistent storage (Airtable) and adds it to the list*/
   const handleSaveCurrentLocation = (event) => {
     event.preventDefault();
     addLocation(
@@ -21,7 +22,6 @@ function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
       currentLocation.longitude
     );
     console.log("save current location");
-    console.log(currentLocation.latitude, currentLocation.longitude);
   };
 
   return (

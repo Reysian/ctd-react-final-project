@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AppContext } from "../App";
 import styles from "./WeeklyForecast.module.css";
 
+/*Displays a 7-day forecast for the current location*/
 function WeeklyForecast({ dates, dailyHighs, dailyLows, dailyWeatherCodes }) {
   const { translateCode } = useContext(AppContext);
   return (

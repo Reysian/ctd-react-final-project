@@ -3,6 +3,7 @@ import ErrorWindow from "../shared/ErrorWindow";
 import CurrentWeather from "../features/CurrentWeather";
 import WeeklyForecast from "../features/WeeklyForecast";
 
+/*Page that displays weather information at the current location*/
 function HomePage({ currentLocation, translateCode, errorMessage }) {
   const [temperature, setTemperature] = useState("...");
   const [humidity, setHumidity] = useState("...");
@@ -14,6 +15,8 @@ function HomePage({ currentLocation, translateCode, errorMessage }) {
   const [dailyLows, setDailyLows] = useState([]);
   const [dailyWeatherCodes, setDailyWeatherCodes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  /*Fetch weather data for the current location*/
   useEffect(() => {
     setIsLoading(true);
     const fetchWeather = async () => {

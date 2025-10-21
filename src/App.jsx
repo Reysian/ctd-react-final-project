@@ -23,6 +23,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  /*On first render, fetch list of locations from persistent storage (Airtable)*/
   useEffect(() => {
     const fetchLocations = async () => {
       setIsLoading(true);
@@ -59,6 +60,7 @@ function App() {
     fetchLocations();
   }, []);
 
+  /*Takes a latitude and longitude, then returns true if the coordinates are valid*/
   const verifyValidCoords = (latitude, longitude) => {
     if (
       latitude <= 90 &&
@@ -68,7 +70,10 @@ function App() {
     ) {
       setErrorMessage("");
       return true;
-    } else if ((latitude > 90 || latitude < -90) && (longitude > 180 || longitude < -180)) {
+    } else if (
+      (latitude > 90 || latitude < -90) &&
+      (longitude > 180 || longitude < -180)
+    ) {
       setErrorMessage("Latitude and longitude are out of range.");
       return false;
     } else if (latitude > 90 || latitude < -90) {
@@ -80,8 +85,8 @@ function App() {
     }
   };
 
+  /*Add a new location to the locations list and save the list to persistent storage (Airtable)*/
   const addLocation = async (title, latitude, longitude) => {
-    //TODO: Check empty location
     const valid = verifyValidCoords(latitude, longitude);
     if (!valid) {
       return;
@@ -95,9 +100,9 @@ function App() {
             title: newLocation.title,
             latitude: newLocation.latitude,
             longitude: newLocation.longitude,
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
 
     console.log(payload);
@@ -134,16 +139,22 @@ function App() {
     return 0;
   };
 
+  /*Update a location inside the locations list and save the new list to persistent storage (Airtable)*/
   const updateLocation = async (editedLocation) => {
-    const valid = verifyValidCoords(editedLocation.latitude, editedLocation.longitude);
+    const valid = verifyValidCoords(
+      editedLocation.latitude,
+      editedLocation.longitude
+    );
     if (!valid) {
       return;
     }
 
-    const originalLocation = locations.find((location) => location.id === editedLocation.id);
+    const originalLocation = locations.find(
+      (location) => location.id === editedLocation.id
+    );
 
-    const updatedLocations = locations.map((location) => 
-      location.id === editedLocation.id ? {...editedLocation} : location
+    const updatedLocations = locations.map((location) =>
+      location.id === editedLocation.id ? { ...editedLocation } : location
     );
 
     setLocations(updatedLocations);
@@ -162,10 +173,10 @@ function App() {
     };
 
     const options = {
-      method: 'PATCH',
+      method: "PATCH",
       headers: {
         Authorization: token,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     };
@@ -177,22 +188,21 @@ function App() {
       }
     } catch (error) {
       console.log(error);
-
       setErrorMessage(`${error.message}. Edit failed...`);
-      const revertedLocations = locations.map((location) => 
-        location.id === originalLocation.id ? {...originalLocation} : location
+      const revertedLocations = locations.map((location) =>
+        location.id === originalLocation.id ? { ...originalLocation } : location
       );
-      
+
       setLocations([...revertedLocations]);
     } finally {
       console.log("PATCH complete");
     }
   };
 
+  /*Delete a location from the locations list and save the shortened list to persistent storage (Airtable)*/
   const deleteLocation = async (deletedLocation) => {
-
     const options = {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
         Authorization: token,
       },
@@ -204,19 +214,20 @@ function App() {
         throw new Error(resp.message);
       }
 
-      const updatedLocations = locations.filter((location) => (location.id !== deletedLocation.id));
+      const updatedLocations = locations.filter(
+        (location) => location.id !== deletedLocation.id
+      );
       setLocations(updatedLocations);
-
     } catch (error) {
       console.log(error);
       setErrorMessage(`${error.message}. Deletion failed...`);
     } finally {
       console.log("DELETE complete");
     }
-  }
+  };
 
+  /*Set new current location (validate first)*/
   const updateCurrentLocation = (title, latitude, longitude) => {
-
     const valid = verifyValidCoords(latitude, longitude);
     if (valid) {
       setErrorMessage("");
@@ -229,6 +240,7 @@ function App() {
     }
   };
 
+  /*Translate a weather code from open-meteo into a written weather condition*/
   const translateCode = useCallback((weatherCode) => {
     let condition = "";
 
@@ -318,7 +330,7 @@ function App() {
         condition = "Thunderstorm with Heavy Hail";
         break;
       default:
-        return "Unknown Weather Condition";
+        return weatherCode;
     }
     return condition;
   }, []);
@@ -335,7 +347,18 @@ function App() {
           <Route
             path="/"
             element={
-              <AppContext.Provider value={{locations, addLocation, updateLocation, deleteLocation, translateCode, updateCurrentLocation, errorMessage, setErrorMessage}}>
+              <AppContext.Provider
+                value={{
+                  locations,
+                  addLocation,
+                  updateLocation,
+                  deleteLocation,
+                  translateCode,
+                  updateCurrentLocation,
+                  errorMessage,
+                  setErrorMessage,
+                }}
+              >
                 <HomePage
                   currentLocation={currentLocation}
                   translateCode={translateCode}
@@ -347,7 +370,18 @@ function App() {
           <Route
             path="/locations"
             element={
-              <AppContext.Provider value={{locations, addLocation, updateLocation, deleteLocation, translateCode, updateCurrentLocation, errorMessage, setErrorMessage}}>
+              <AppContext.Provider
+                value={{
+                  locations,
+                  addLocation,
+                  updateLocation,
+                  deleteLocation,
+                  translateCode,
+                  updateCurrentLocation,
+                  errorMessage,
+                  setErrorMessage,
+                }}
+              >
                 <LocationsPage
                   locations={locations}
                   setLocations={setLocations}

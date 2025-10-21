@@ -1,13 +1,16 @@
-.forecast, .forecast th, .forecast td{
-    border: 1px solid;
+.forecast,
+.forecast th,
+.forecast td {
+  border: 1px solid;
 }
 
 .forecast th {
-    width: 150px;
+  width: 160px;
 }
 
 .forecast td {
-    font-weight: 500;
-    vertical-align: top;
-    padding: 0 1rem;
+  font-weight: 500;
+  font-size: 1.2rem;
+  vertical-align: top;
+  padding: 0 1rem;
 }

@@ -1,9 +1,9 @@
 import LocationList from "../features/LocationList/LocationList";
-import LocationForm from "../shared/LocationForm";
 import EditWindow from "../shared/EditWindow";
 import ErrorWindow from "../shared/ErrorWindow";
 import { useState } from "react";
 
+/* Page that displays a list of saved locations with current weather information */
 function LocationsPage({
   locations,
   isLoading,
@@ -16,6 +16,7 @@ function LocationsPage({
   const [isAdding, setIsAdding] = useState(false);
   const [editedLocation, setEditedLocation] = useState({});
 
+  /* Opens edit window when editing a location */
   const openEditWindow = (location) => {
     if (!isEditing && !isAdding) {
       setEditedLocation({ ...location });
@@ -23,12 +24,14 @@ function LocationsPage({
     }
   };
 
+  /* Opens add window when adding a location */
   const openAddWindow = () => {
     if (!isAdding && !isEditing) {
       setIsAdding(true);
     }
   };
 
+  /*Updates edited location and saves it to persistent storage (Airtable)*/
   const submitEditedLocation = (title, latitude, longitude) => {
     const updated = { ...editedLocation, title, latitude, longitude };
     setEditedLocation();
@@ -36,6 +39,7 @@ function LocationsPage({
     setIsEditing(false);
   };
 
+  /*Saves added location to persistent storage (Airtable)*/
   const submitAddedLocation = (title, latitude, longitude) => {
     addLocation(title, latitude, longitude);
     setIsAdding(false);
@@ -53,7 +57,7 @@ function LocationsPage({
   return (
     <>
       <h1>Saved Locations</h1>
-      {errorMessage && <ErrorWindow errorMessage={errorMessage}/>}
+      {errorMessage && <ErrorWindow errorMessage={errorMessage} />}
       {isAdding && (
         <EditWindow
           header="Add Location"

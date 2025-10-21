@@ -1,0 +1,22 @@
+.currentWeather {
+  display: flex;
+  flex-direction: row;
+}
+
+.currentWeather h1 {
+  font-size: 5rem;
+}
+
+.currentWeather h3 {
+  font-size: 1.3rem;
+}
+
+.currentWeather ul {
+  list-style: none;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.currentWeather li {
+  margin: 0.8rem;
+}
