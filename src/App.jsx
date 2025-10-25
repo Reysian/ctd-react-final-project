@@ -4,7 +4,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./features/Navbar";
 import styles from "./App.module.css";
 import AppContext from "./shared/AppContext";
-import { useState, useEffect, useCallback, createContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Routes, Route } from "react-router";
 
 const url = `https://api.airtable.com/v0/${import.meta.env.VITE_BASE_ID}/${
