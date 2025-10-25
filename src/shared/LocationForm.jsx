@@ -29,6 +29,7 @@ function LocationForm({
 
   return (
     <form onSubmit={(event) => handleSubmit(event)}>
+      <label htmlFor="title">Name:</label>
       <input
         id="title"
         ref={titleInput}
@@ -37,6 +38,7 @@ function LocationForm({
         value={workingTitle}
         onChange={(event) => setWorkingTitle(event.target.value)}
       ></input>
+      <label htmlFor="lat"> Lat:</label>
       <input
         id="lat"
         ref={latitudeInput}
@@ -45,6 +47,7 @@ function LocationForm({
         value={workingLatitude}
         onChange={(event) => setWorkingLatitude(event.target.value)}
       ></input>
+      <label htmlFor="lon"> Lon:</label>
       <input
         id="lon"
         ref={longitudeInput}

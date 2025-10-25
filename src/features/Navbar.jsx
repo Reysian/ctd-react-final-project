@@ -26,10 +26,12 @@ function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
 
   return (
     <nav className={styles.nav}>
-      <Link to="/" className={styles.title}>
-        DreamWeather
-      </Link>
       <ul>
+        <li>
+          <Link to="/" className={styles.title}>
+            DreamWeather
+          </Link>
+        </li>
         <li>
           <NavLink
             to={"/"}
@@ -50,6 +52,8 @@ function Navbar({ currentLocation, updateCurrentLocation, addLocation }) {
             Locations
           </NavLink>
         </li>
+      </ul>
+      <ul>
         <li>
           <LocationForm submitLocation={updateCoords} />
         </li>

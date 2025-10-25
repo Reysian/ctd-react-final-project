@@ -49,7 +49,7 @@ function HomePage({ currentLocation, translateCode, errorMessage }) {
   return (
     <>
       <h1>Home Page</h1>
-      {errorMessage && <ErrorWindow errorMessage={errorMessage} />}
+      {errorMessage && <ErrorWindow>{errorMessage}</ErrorWindow>}
       {isLoading ? (
         "...Loading Weather Data"
       ) : (

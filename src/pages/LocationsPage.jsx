@@ -57,23 +57,25 @@ function LocationsPage({
   return (
     <>
       <h1>Saved Locations</h1>
-      {errorMessage && <ErrorWindow errorMessage={errorMessage} />}
+      {errorMessage && <ErrorWindow>{errorMessage}</ErrorWindow>}
       {isAdding && (
         <EditWindow
-          header="Add Location"
           submitLocation={submitAddedLocation}
           cancelEdit={cancelEdit}
-        />
+        >
+          Add Location
+        </EditWindow>
       )}
       {isEditing && (
         <EditWindow
-          header="Edit Location"
           title={editedLocation.title}
           latitude={editedLocation.latitude}
           longitude={editedLocation.longitude}
           submitLocation={submitEditedLocation}
           cancelEdit={cancelEdit}
-        />
+        >
+          Edit Location
+        </EditWindow>
       )}
       {isLoading ? (
         "Loading Locations..."

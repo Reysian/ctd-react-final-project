@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppContext } from "../App";
+import AppContext from "../shared/AppContext";
 import styles from "./WeeklyForecast.module.css";
 
 /*Displays a 7-day forecast for the current location*/

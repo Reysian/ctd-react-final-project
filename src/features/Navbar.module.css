@@ -6,6 +6,11 @@
   padding: 1rem;
 }
 
+.nav label {
+  color: #646cff;
+  font-weight: 400;
+}
+
 .nav ul {
   display: flex;
   padding: 0;

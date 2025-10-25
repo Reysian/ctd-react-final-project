@@ -1,7 +1,7 @@
 import styles from "./LocationListItem.module.css";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
-import { AppContext } from "../../App";
+import AppContext from "../../shared/AppContext";
 
 /*Displays a single location in the list with some current weather information*/
 function LocationListItem({ location, editLocation, deleteLocation }) {
